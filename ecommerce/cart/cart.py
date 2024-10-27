@@ -23,3 +23,9 @@ class Cart():
 
     def __len__(self):
         return len(self.cart)
+
+    def get_products(self):
+        prod_ids = self.cart.keys()
+        prods = Product.objects.filter(id__in=prod_ids)
+
+        return prods

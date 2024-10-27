@@ -7,7 +7,9 @@ from store.models import Product
 
 # Create your views here.
 def cart_summary(request):
-    return render(request, 'cart_summary.html', {})
+    cart = Cart(request)
+    prods = cart.get_products()
+    return render(request, 'cart_summary.html', {"prods": prods})
 
 def cart_add(request):
     cart = Cart(request)
