@@ -11,6 +11,16 @@ class Cart():
 
         self.cart = cart
 
+    def update(self, product, quantity):
+        product_id = str(product)
+        product_quantity = str(quantity)
+
+        cart = self.cart
+
+        cart[product_id] = product_quantity
+
+        self.session.modified = True
+
     def add(self, product, quantity):
         product_id = str(product.id)
         product_quantity = str(quantity)
