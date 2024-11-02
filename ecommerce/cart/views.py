@@ -12,7 +12,8 @@ def cart_summary(request):
     cart = Cart(request)
     prods = cart.get_products()
     quantities = cart.get_quantities()
-    return render(request, 'cart_summary.html', {"prods": prods, "quantities" : quantities})
+    total = cart.total()
+    return render(request, 'cart_summary.html', {"prods": prods, "quantities" : quantities, "total": total})
 
 def cart_add(request):
     cart = Cart(request)
