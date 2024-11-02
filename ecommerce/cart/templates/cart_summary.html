@@ -60,6 +60,7 @@
                             <br>
                             <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
                             <button type="button" data-index="{{ product.id }}" class="btn btn-secondary update-cart">Update</button>
+                            <button type="button" data-index="{{ product.id }}" class="btn btn-danger btn-secondary delete-cart">Remove</button>
                         </center>
                     </div>
                   </div>
@@ -67,7 +68,7 @@
             </div>
         {% endfor %}
     {% else %}
-         <br> There is no items in your cart <br>
+         <br> There are no items in your cart <br><br><br>
     {% endif %}
 </div>
 
@@ -88,7 +89,27 @@ $(document).on('click', '.update-cart', function(e) {
     },
 
     success: function(json) {
-      document.getElementById('cart_quantity').textContent = json.qty
+      location.reload()
+    },
+
+    error: function(xhr, errmsg, err) {}
+  });
+})
+
+
+$(document).on('click', '.delete-cart', function(e) {
+  e.preventDefault();
+
+  $.ajax({
+    type: 'POST',
+    url: '{% url 'cart_delete' %}',
+    data: {
+      product_id: $(this).data('index'),
+      csrfmiddlewaretoken: '{{ csrf_token }}',
+      action: 'post'
+    },
+
+    success: function(json) {
       location.reload()
     },
 

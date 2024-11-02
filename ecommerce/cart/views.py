@@ -1,3 +1,5 @@
+from itertools import product
+
 from django.shortcuts import render, get_object_or_404
 from .cart import Cart
 from django.http import JsonResponse
@@ -25,7 +27,12 @@ def cart_add(request):
         return response
 
 def cart_delete(request):
-    pass
+    cart = Cart(request)
+    if request.POST.get('action') == 'post':
+        product_id = int(request.POST.get('product_id'))
+        cart.delete(product=product_id)
+        response = JsonResponse({"quantity": product_id})
+        return response
 
 def cart_update(request):
     cart = Cart(request)
