@@ -1,3 +1,4 @@
+from distutils.command.install import install
 from itertools import product
 
 from django.shortcuts import render, redirect
@@ -7,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .forms import SignUpForm
+from .forms import SignUpForm, UpdateProfileForm
 
 
 def home(request):
@@ -74,3 +75,19 @@ def category(request, foo):
 def category_summary(request):
     categories = Category.objects.all()
     return render(request, 'category_summary.html', {'categories':categories})
+
+def update_profile(request):
+    if request.user.is_authenticated:
+        user = User.objects.get(id=request.user.id)
+        update_profile_form = UpdateProfileForm(request.POST or None, instance=user)
+
+        if update_profile_form.is_valid():
+            update_profile_form.save()
+
+            login(request, user)
+            messages.success(request, "User profile has been updated")
+            return render(request, 'home.html', {})
+        return render(request, 'update_profile.html', {'update_profile_form': update_profile_form})
+    else:
+        messages.success(request, "You should be logged in to edit the profile!!!")
+        return render(request, 'home.html', {})
