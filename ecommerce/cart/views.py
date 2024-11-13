@@ -1,5 +1,6 @@
 from itertools import product
 
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from .cart import Cart
 from django.http import JsonResponse
@@ -24,7 +25,7 @@ def cart_add(request):
         cart.add(product=product, quantity=product_quantity)
         cart_quantity = cart.__len__()
         response = JsonResponse({'Product Name: ': product.name, 'qty: ': cart_quantity})
-
+        messages.success(request, "Item was added to the cart!")
         return response
 
 def cart_delete(request):
@@ -33,6 +34,7 @@ def cart_delete(request):
         product_id = int(request.POST.get('product_id'))
         cart.delete(product=product_id)
         response = JsonResponse({"quantity": product_id})
+        messages.success(request, "Item was removed from the cart!")
         return response
 
 def cart_update(request):
@@ -44,4 +46,5 @@ def cart_update(request):
         cart.update(product=product_id, quantity=product_quantity)
 
         response = JsonResponse({"quantity": product_quantity})
+        messages.success(request, "Item quantity was changed!")
         return response
