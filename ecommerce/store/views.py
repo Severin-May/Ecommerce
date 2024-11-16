@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm, UpdateProfileForm, ChangePasswordForm, UserInfoForm
-
+from django.db.models import Q
 
 def home(request):
     products = Product.objects.all()
@@ -131,3 +131,18 @@ def update_profile_info(request):
     else:
         messages.success(request, "You should be logged in to edit the user info!!!")
         return render(request, 'home.html', {})
+
+def search(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched))
+
+        if not searched:
+            messages.error(request, "The searched product does not exist!")
+            return render(request, 'search.html', {})
+        else:
+            return render(request, 'search.html', {'searched': searched})
+    else:
+        pass
+
+    return render(request, 'search.html', {})
