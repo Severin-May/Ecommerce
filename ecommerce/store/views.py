@@ -2,13 +2,13 @@ from distutils.command.install import install
 from itertools import product
 
 from django.shortcuts import render, redirect
-from .models import Product, Category
+from .models import Product, Category, Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .forms import SignUpForm, UpdateProfileForm, ChangePasswordForm
+from .forms import SignUpForm, UpdateProfileForm, ChangePasswordForm, UserInfoForm
 
 
 def home(request):
@@ -49,10 +49,10 @@ def register_user(request):
 
             user = authenticate(username=username, password=password)
             login(request, user)
-            messages.success(request, "Registered, bro!")
-            return redirect('home')
+            messages.success(request, "Registered, bro! Now fill out the personal info!")
+            return redirect('update_profile_info')
         else:
-            messages.success(request, "Oooppsi, there is a problem, bro!")
+            messages.success(request, "Oooppsi, there is a problem with registration, bro!")
             return redirect('register')
     else:
         return render(request, 'register.html', {'form': form})
@@ -115,3 +115,19 @@ def update_password(request):
     else:
         messages.success(request, "You should be logged in to edit the password!!!")
         return redirect('home')
+
+
+def update_profile_info(request):
+    if request.user.is_authenticated:
+        user = Profile.objects.get(user__id=request.user.id)
+        update_profile_info_form = UserInfoForm(request.POST or None, instance=user)
+
+        if update_profile_info_form.is_valid():
+            update_profile_info_form.save()
+
+            messages.success(request, "User info has been updated")
+            return render(request, 'home.html', {})
+        return render(request, 'update_profile_info.html', {'update_profile_info_form': update_profile_info_form})
+    else:
+        messages.success(request, "You should be logged in to edit the user info!!!")
+        return render(request, 'home.html', {})
