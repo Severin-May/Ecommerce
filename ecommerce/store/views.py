@@ -10,6 +10,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm, UpdateProfileForm, ChangePasswordForm, UserInfoForm
 from django.db.models import Q
+import json
+
+from cart.cart import Cart
+
+
+# from cart.cart import Cart
 
 def home(request):
     products = Product.objects.all()
@@ -25,6 +31,15 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+
+            curr_user = Profile.objects.get(user__id=request.user.id)
+            saved_cart = curr_user.old_cart
+            if saved_cart:
+                json_cart = json.loads(saved_cart)
+                cart = Cart(request)
+
+                for key, value in json_cart.items():
+                    cart.db_add(product=key,quantity=value)
             messages.success(request, "You have been logged in!")
             return redirect('home')
         else:
