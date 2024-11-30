@@ -9,13 +9,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm, UpdateProfileForm, ChangePasswordForm, UserInfoForm
+# from payment.forms import ShippingForm
+# from payment.models import ShippingAddress
 from django.db.models import Q
 import json
 
 from cart.cart import Cart
 
+from payment.forms import ShippingForm
+from payment.models import ShippingAddress
 
-# from cart.cart import Cart
 
 def home(request):
     products = Product.objects.all()
@@ -137,12 +140,16 @@ def update_profile_info(request):
         user = Profile.objects.get(user__id=request.user.id)
         update_profile_info_form = UserInfoForm(request.POST or None, instance=user)
 
-        if update_profile_info_form.is_valid():
+        shipping_user = ShippingAddress.objects.get(user=request.user)
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
+
+        if update_profile_info_form.is_valid() or shipping_form.is_valid():
             update_profile_info_form.save()
+            shipping_form.save()
 
             messages.success(request, "User info has been updated")
             return render(request, 'home.html', {})
-        return render(request, 'update_profile_info.html', {'update_profile_info_form': update_profile_info_form})
+        return render(request, 'update_profile_info.html', {'update_profile_info_form': update_profile_info_form, 'shipping_form': shipping_form})
     else:
         messages.success(request, "You should be logged in to edit the user info!!!")
         return render(request, 'home.html', {})
