@@ -9,8 +9,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm, UpdateProfileForm, ChangePasswordForm, UserInfoForm
-# from payment.forms import ShippingForm
-# from payment.models import ShippingAddress
 from django.db.models import Q
 import json
 
