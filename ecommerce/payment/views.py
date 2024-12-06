@@ -6,7 +6,7 @@ from django.template.context_processors import request
 from payment.forms import ShippingForm, PaymentForm
 from payment.models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
-
+from store.models import Product
 
 def payment_success(request):
     return render(request, "payment/payment_success.html", {})
@@ -53,6 +53,8 @@ def process_order(request):
     if request.POST:
         cart = Cart(request)
         total = cart.total()
+        prods = cart.get_products()
+        quantities = cart.get_quantities()
 
         payment_form = PaymentForm(request.POST or None)
 
@@ -67,12 +69,39 @@ def process_order(request):
             order_user = request.user
             order_details = Order(user=order_user, full_name=order_fullname, email=order_email, address=ship_order_address, amount_paid=order_amount)
             order_details.save()
+
+            order_id = order_details.pk #primary_key
+
+            for prod in prods:
+                product_id = prod.id
+                if prod.is_sale:
+                    product_price = prod.sale_price
+                else:
+                    product_price = prod.price
+
+                for key, value in quantities.items():
+                    if int(key) == prod.id:
+                        order_item_details = OrderItem(order_id=order_id, product_id=product_id, user=order_user, quantity=value, price=product_price)
+                        order_item_details.save()
             messages.error(request, "Your order was placed!!!")
             return redirect('home')
         else:
             order_details = Order(full_name=order_fullname, email=order_email, address=ship_order_address, amount_paid=order_amount)
             order_details.save()
-            messages.error(request, "Your order was placed!!!")
+            order_id = order_details.pk  # primary_key
+
+            for prod in prods:
+                product_id = prod.id
+                if prod.is_sale:
+                    product_price = prod.sale_price
+                else:
+                    product_price = prod.price
+
+                for key, value in quantities.items():
+                    if int(key) == prod.id:
+                        order_item_details = OrderItem(order_id=order_id, product_id=product_id, quantity=value, price=product_price)
+                        order_item_details.save()
+            messages.error(request, "Your order was placed without logging in!!!")
             return redirect('home')
     else:
         messages.error(request, "Access denied!!!")
