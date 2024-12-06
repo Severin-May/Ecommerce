@@ -5,14 +5,14 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
-    path('login/', views.login_user, name='login'),
-    path('logout/', views.logout_user, name='logout'),
-    path('register/', views.register_user, name='register'),
+    path('search/', views.search, name='search'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+    path('register/', views.user_register, name='register'),
     path('product/<int:pk>', views.product, name='product'),
     path('category/<str:foo>', views.category, name='category'),
+    path('update_profile/', views.profile_update, name='update_profile'),
+    path('update_password/', views.password_update, name='update_password'),
     path('category_summary/', views.category_summary, name='category_summary'),
-    path('update_profile/', views.update_profile, name='update_profile'),
-    path('update_password/', views.update_password, name='update_password'),
-    path('update_profile_info/', views.update_profile_info, name='update_profile_info'),
-    path('search/', views.search, name='search')
+    path('update_profile_info/', views.profile_info_update, name='update_profile_info'),
 ]

@@ -83,6 +83,11 @@ def process_order(request):
                     if int(key) == prod.id:
                         order_item_details = OrderItem(order_id=order_id, product_id=product_id, user=order_user, quantity=value, price=product_price)
                         order_item_details.save()
+
+            for key in list(request.session.keys()):
+                if key == 'session_key':
+                    del request.session[key]
+
             messages.error(request, "Your order was placed!!!")
             return redirect('home')
         else:
@@ -101,6 +106,11 @@ def process_order(request):
                     if int(key) == prod.id:
                         order_item_details = OrderItem(order_id=order_id, product_id=product_id, quantity=value, price=product_price)
                         order_item_details.save()
+
+            for key in list(request.session.key()):
+                if key == 'session_key':
+                    del request.session[key]
+
             messages.error(request, "Your order was placed without logging in!!!")
             return redirect('home')
     else:
