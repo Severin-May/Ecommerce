@@ -6,8 +6,8 @@
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Your items </h1>
-            <p class="lead fw-normal text-white-50 mb-0">Checkout</p>
+            <h1 class="display-4 fw-bolder">Billing</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Payment info</p>
         </div>
     </div>
 </header>
@@ -53,10 +53,28 @@
             Shipping Info
           </div>
           <div class="card-body">
-              <form method="POST" action="{% url 'billing_info' %}">
+              Name: {{ shipping_details.ship_full_name }} <br><br>
+              Email Address: {{ shipping_details.ship_email }} <br><br>
+              Address 1: {{ shipping_details.ship_address1 }} <br><br>
+              Address 2: {{ shipping_details.ship_address2 }} <br><br>
+              City: {{ shipping_details.ship_city }} <br><br>
+              State: {{ shipping_details.ship_state }} <br><br>
+              Country: {{ shipping_details.ship_country }} <br><br>
+              Zipcode: {{ shipping_details.ship_zipcode }} <br><br>
+
+              <a href="{% url 'checkout' %}" class="btn btn-sm btn-outline-secondary">Edit Shipping Info</a>
+          </div>
+      </div>
+      <br><br>
+      <div class="card">
+          <div class="card-header">
+            Billing Info
+          </div>
+          <div class="card-body">
+              <form method="POST" action="{% url 'process_order' %}">
                   {% csrf_token %}
-                {{ shipping_form.as_p }}
-                  <button type="submit" class="btn btn-secondary">Continue to payment</button>
+                {{ billing_form.as_p }}
+                <button type="submit" class="btn btn-success">Pay</button>
               </form>
           </div>
       </div>
