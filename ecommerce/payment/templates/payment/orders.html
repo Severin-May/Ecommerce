@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Pending Orders</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Welcome</p>
+        </div>
+    </div>
+</header>
+<div class="container">
+  <br><br>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <div class="card-header">
+          Order {{ order.id }} - $ {{ order.amount_paid }}
+        </div>
+        <div class="card-body">
+          <strong>Full Name:</strong> {{ order.full_name }} <br><br>
+          <strong>Email:</strong>  {{ order.email }} <br><br>
+          <strong>Order Date:</strong>  {{ order.date_ordered }} <br><br>
+          <strong>Shipping Date:</strong>  {{ order.date_shipped }} <br><br>
+          <strong>Shipping Address:</strong>  {{ order.address }} <br><br>
+          <strong>Items:</strong>
+          {% for item in order_items %}
+            {{ item.product }} - {{ item.quantity }} - ${{ item.price }}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br>
+</div>
+
+{% endblock %}

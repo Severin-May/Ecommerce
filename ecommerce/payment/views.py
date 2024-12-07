@@ -132,3 +132,12 @@ def pending_orders(request):
     else:
         messages.error(request, "Access denied!!!")
         return redirect('home')
+
+def orders(request, pk):
+    if request.user.is_authenticated and request.user.is_superuser:
+        order = Order.objects.get(id=pk)
+        order_items = OrderItem.objects.filter(order=pk)
+        return render(request, 'payment/orders.html',{"order":order, "order_items":order_items})
+    else:
+        messages.error(request, "Access denied!!!")
+        return redirect('home')

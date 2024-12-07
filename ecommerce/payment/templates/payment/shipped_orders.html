@@ -26,7 +26,7 @@
         <tbody>
         {% for order in shipped_orders %}
           <tr>
-            <td>{{ order.id }}</td>
+            <td><a href="{% url 'orders' order.id %}">{{ order.id }}</a></td>
             <td>${{ order.amount_paid }}</td>
             <td>{{ order.email }}</td>
             <td>{{ order.date_shipped }}</td>
