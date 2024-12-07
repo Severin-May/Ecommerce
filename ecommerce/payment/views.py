@@ -22,8 +22,7 @@ def checkout(request):
         shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
         return render(request, 'payment/checkout.html', {"prods": prods, "quantities": quantities, "total": total, "shipping_form":shipping_form})
     else:
-        shipping_form = ShippingForm(request.POST or None)
-        return render(request, 'payment/checkout.html', {"prods": prods, "quantities": quantities, "total": total, "shipping_form":shipping_form})
+        return render(request, 'payment/checkout.html', {"prods": prods, "quantities": quantities, "total": total, "shipping_form":ShippingForm(request.POST or None)})
 
 def billing_info(request):
     if request.POST:
@@ -40,16 +39,15 @@ def billing_info(request):
             return render(request, 'payment/billing_info.html',
                           {"prods": prods, "quantities": quantities, "total": total, "shipping_details": request.POST, "billing_form": billing_form})
         else:
-            billing_form = PaymentForm()
             messages.error(request, "You are not logged in!!!")
             return render(request, 'payment/billing_info.html',
-                          {"prods": prods, "quantities": quantities, "total": total, "shipping_details": request.POST, "billing_form": billing_form})
+                          {"prods": prods, "quantities": quantities, "total": total, "shipping_details": request.POST, "billing_form": PaymentForm()})
 
     else:
         messages.error(request, "Access denied")
         return redirect('home')
 
-def process_order(request):
+def order_processing(request):
     if request.POST:
         cart = Cart(request)
         total = cart.total()
