@@ -115,3 +115,20 @@ def order_processing(request):
         messages.error(request, "Access denied!!!")
         return redirect('home')
 
+
+def shipped_orders(request):
+
+    if request.user.is_authenticated and request.user.is_superuser:
+        shipped_orders = Order.objects.filter(is_shipped=True)
+        return render(request, 'payment/shipped_orders.html',{"shipped_orders":shipped_orders})
+    else:
+        messages.error(request, "Access denied!!!")
+        return redirect('home')
+
+def pending_orders(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        pending_orders = Order.objects.filter(is_shipped=False)
+        return render(request, 'payment/pending_orders.html',{"pending_orders":pending_orders})
+    else:
+        messages.error(request, "Access denied!!!")
+        return redirect('home')

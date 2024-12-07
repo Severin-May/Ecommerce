@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Shipped Orders</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Welcome</p>
+        </div>
+    </div>
+</header>
+<div class="container">
+  <br><br>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+       <table class="table table-hover table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Order id</th>
+            <th scope="col">Price</th>
+            <th scope="col">Client contact</th>
+            <th scope="col">Shipped date</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for order in shipped_orders %}
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>${{ order.amount_paid }}</td>
+            <td>{{ order.email }}</td>
+            <td>{{ order.date_shipped }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <br><br>
+</div>
+
+{% endblock %}
