@@ -11,14 +11,14 @@
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'update_profile' %}">User Profile</a></li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" href="{% url 'update_profile_info' %}">User Info</a></li>
-                        </ul>
-                    </li>
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>-->
+<!--                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--                            <li><a class="dropdown-item" href="{% url 'update_profile' %}">User Profile</a></li>-->
+<!--                            <li><hr class="dropdown-divider" /></li>-->
+<!--                            <li><a class="dropdown-item" href="{% url 'update_profile_info' %}">User Info</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
                     {% if user.is_superuser %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Orders</a>
@@ -44,6 +44,7 @@
                     </ul>
                 </li>
             </ul>
+
             <form class="d-flex">
                 <a href="{% url 'cart_summary' %}" class="btn btn-outline-dark">
                     <i class="bi-cart-fill me-1"></i>
@@ -51,6 +52,20 @@
                     <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity"> {{ cart | length }}</span>
                 </a>
             </form>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            {% if user.is_authenticated %}
+                <div class="d-flex dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-fill"></i>
+                    </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'update_profile' %}">User Profile</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{% url 'update_profile_info' %}">User Info</a></li>
+                        </ul>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            {% endif %}
         </div>
     </div>
 </nav>
