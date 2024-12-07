@@ -39,7 +39,7 @@
                         <li><a class="dropdown-item" href="{% url 'category_summary' %}">All Products</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         {% for category in categories %}
-                            <li><a class="dropdown-item" href="{% url 'category' category.name|slugify %}">{{ category.name }}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'category' category.name %}">{{ category.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
